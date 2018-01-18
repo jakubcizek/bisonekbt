@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_below="@+id/button5"
+        android:layout_toEndOf="@+id/button5"
+        android:background="@drawable/right" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/up" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_below="@+id/button3"
+        android:layout_toEndOf="@+id/button2"
+        android:background="@drawable/down" />
+
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_above="@+id/button6"
+        android:layout_toEndOf="@+id/button2"
+        android:background="@drawable/stop" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_below="@+id/button5"
+        android:layout_toStartOf="@+id/button5"
+        android:background="@drawable/left"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="147dp" />
+
+    <Button
+        android:id="@+id/btnLeds"
+        android:layout_width="120dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="19dp"
+        android:layout_toStartOf="@+id/btnHorn"
+        android:text="Světla" />
+
+    <Button
+        android:id="@+id/btnHorn"
+        android:layout_width="120dip"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnLeds"
+        android:layout_alignBottom="@+id/btnLeds"
+        android:layout_centerHorizontal="true"
+        android:text="Klakson" />
+
+    <Button
+        android:id="@+id/btnWaymo"
+        android:layout_width="120dip"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnHorn"
+        android:layout_alignBottom="@+id/btnHorn"
+        android:layout_toEndOf="@+id/btnHorn"
+        android:text="Autopilot" />
+
+    <SeekBar
+        android:id="@+id/seekBar4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnHorn"
+        android:layout_alignStart="@+id/button6"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/seekBar4"
+        android:layout_alignStart="@+id/btnLeds"
+        android:text="Výkon motorů:" />
+
+</RelativeLayout>
+
