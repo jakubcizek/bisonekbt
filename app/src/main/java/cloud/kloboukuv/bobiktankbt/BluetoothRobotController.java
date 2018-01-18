@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -20,41 +21,98 @@ import java.util.Date;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.xdty.preference.colorpicker.ColorPickerDialog;
+import org.xdty.preference.colorpicker.ColorPickerSwatch;
+import android.support.v4.content.ContextCompat;
+
 
 public class BluetoothRobotController extends AppCompatActivity {
 
-    Button btnLeft, btnRight, btnForward, btnBackward, btnStop;
+    Button btnLeft, btnRight, btnForward, btnBackward, btnStop, btnLeds, btnHorn, btnAutopilot;
     String address = null;
     private ProgressDialog progress;
-    BluetoothAdapter myBluetooth = null;
-    BluetoothSocket btSocket = null;
-    private boolean isBtConnected = false;
+    BluetoothAdapter bluetoothAdapter = null;
+    BluetoothSocket bluetoothSocket = null;
+    private boolean isBluetoothConnected = false;
     static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    boolean movementStarted = false;
+    boolean isMovement = false;
+    boolean autopilot = false;
+    private int mSelectedColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        Intent newint = getIntent();
-        address = newint.getStringExtra(BluetoothDevicesList.EXTRA_ADDRESS); //receive the address of the bluetooth device
+        Intent intent = getIntent();
+        address = intent.getStringExtra(BluetoothDevicesList.EXTRA_ADDRESS);
 
-        //view of the ledControl
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.bluetooth_robot_controller);
 
-        //call the widgtes
-        btnLeft = (Button)findViewById(R.id.button2);
-        btnRight = (Button)findViewById(R.id.button3);
-        btnForward = (Button)findViewById(R.id.button5);
-        btnBackward = (Button)findViewById(R.id.button6);
-        btnStop = (Button)findViewById(R.id.button7);
+        btnLeft = findViewById(R.id.btn_left);
+        btnRight = findViewById(R.id.btn_right);
+        btnForward = findViewById(R.id.btn_forward);
+        btnBackward = findViewById(R.id.btn_backward);
+        btnStop = findViewById(R.id.btn_stop);
+        btnLeds = findViewById(R.id.btn_leds);
+        btnHorn = findViewById(R.id.btn_horn);
+        btnAutopilot = findViewById(R.id.btn_autopilot);
 
-        new ConnectBT().execute(); //Call the class to connect
+        int[] mColors = getResources().getIntArray(R.array.default_rainbow);
+        mSelectedColor = ContextCompat.getColor(this, R.color.flamingo);
+
+        new BluetoothConnector().execute();
+
+        final ColorPickerDialog dlgColors = ColorPickerDialog.newInstance(R.string.color_picker_default_title,
+                mColors,
+                mSelectedColor,
+                5,
+                ColorPickerDialog.SIZE_SMALL,
+                true
+        );
+
+        dlgColors.setOnColorSelectedListener(new ColorPickerSwatch.OnColorSelectedListener()
+        {
+            @Override
+            public void onColorSelected(int color) {
+                mSelectedColor = color;
+                Log.v("CONTROLLER", Integer.toString(color));
+            }
+
+        });
+
+
+        btnLeds.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dlgColors.show(getFragmentManager(), "color_dialog_test");
+            }
+        });
+
+        btnHorn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sendCommand("H");
+            }
+        });
+
+        btnAutopilot.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(autopilot)
+                {
+                    autopilot = false;
+                    btnAutopilot.setText(getString(R.string.btn_autopilot));
+                    sendCommand("A0");
+                }
+                else{
+                    autopilot = true;
+                    btnAutopilot.setText(getString(R.string.btn_manual));
+                    sendCommand("A1");
+                }
+            }
+        });
+
 
         btnStop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                movementStarted = false;
+                isMovement = false;
                 sendCommand("0");
             }
         });
@@ -63,34 +121,34 @@ public class BluetoothRobotController extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    if(!movementStarted) {
+                    if(!isMovement) {
                         sendCommand("L");
-                        movementStarted = true;
+                        isMovement = true;
                     }
                     return true;
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP){
                     sendCommand("0");
-                    movementStarted = false;
+                    isMovement = false;
                     return true;
                 }
                 return false;
             }
         });
 
-        btnRight.setOnTouchListener(new View.OnTouchListener(){
+        btnRight. setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    if(!movementStarted) {
+                    if(!isMovement) {
                         sendCommand("R");
-                        movementStarted = true;
+                        isMovement = true;
                     }
                     return true;
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP){
                     sendCommand("0");
-                    movementStarted = false;
+                    isMovement = false;
                     return true;
                 }
                 return false;
@@ -102,15 +160,15 @@ public class BluetoothRobotController extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    if(!movementStarted) {
+                    if(!isMovement) {
                         sendCommand("F");
-                        movementStarted = true;
+                        isMovement = true;
                     }
                     return true;
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP){
                     sendCommand("0");
-                    movementStarted = false;
+                    isMovement = false;
                     return true;
                 }
                 return false;
@@ -121,15 +179,15 @@ public class BluetoothRobotController extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    if(!movementStarted) {
+                    if(!isMovement) {
                         sendCommand("B");
-                        movementStarted = true;
+                        isMovement = true;
                     }
                     return true;
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP){
                     sendCommand("0");
-                    movementStarted = false;
+                    isMovement = false;
                     return true;
                 }
                 return false;
@@ -146,16 +204,16 @@ public class BluetoothRobotController extends AppCompatActivity {
     boolean sendCommand(String command)
     {
         boolean retval;
-        if (btSocket!=null)
+        if (bluetoothSocket !=null)
         {
             try
             {
-                btSocket.getOutputStream().write((command + "\n").getBytes());
+                bluetoothSocket.getOutputStream().write((command + "\n").getBytes());
                 retval = true;
             }
             catch (IOException e)
             {
-                msg("Error");
+                toastMessage(getString(R.string.bt_com_error));
                 retval = false;
             }
         }
@@ -168,51 +226,50 @@ public class BluetoothRobotController extends AppCompatActivity {
 
     private void disconnect()
     {
-        if (btSocket!=null)
+        if (bluetoothSocket !=null)
         {
             try
             {
-                btSocket.close();
+                bluetoothSocket.close();
             }
             catch (IOException e)
-            { msg("Error");}
+            { toastMessage(getString(R.string.bt_com_error));}
         }
     }
 
-    // fast way to call Toast
-    private void msg(String s)
+    private void toastMessage(String s)
     {
         Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
     }
 
 
-    private class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
+    private class BluetoothConnector extends AsyncTask<Void, Void, Void>
     {
-        private boolean ConnectSuccess = true; //if it's here, it's almost connected
+        private boolean success = true;
 
         @Override
         protected void onPreExecute()
         {
-            progress = ProgressDialog.show(BluetoothRobotController.this, "Připojuji se k tanku", "Tož trpělivost!");  //show a progress dialog
+            progress = ProgressDialog.show(BluetoothRobotController.this, getString(R.string.bt_connecting_title), getString(R.string.bt_connecting_msg));
         }
 
         @Override
-        protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
+        protected Void doInBackground(Void... devices)
         {
             try
             {
-                if (btSocket == null || !isBtConnected)
+                if (bluetoothSocket == null || !isBluetoothConnected)
                 {
-                    myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    BluetoothDevice device = myBluetooth.getRemoteDevice(address);//connects to the device's address and checks if it's available
-                    btSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);//create a RFCOMM (SPP) connection
+                    bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
+                    bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                    btSocket.connect();
+                    bluetoothSocket.connect();
                 }
             }
             catch (IOException e)
             {
-                ConnectSuccess = false;//if the try failed, you can check the exception here
+                success = false;
             }
             return null;
         }
@@ -221,15 +278,15 @@ public class BluetoothRobotController extends AppCompatActivity {
         {
             super.onPostExecute(result);
 
-            if (!ConnectSuccess)
+            if (!success)
             {
-                msg("Tož nejde to připojit. Zkus to znova.");
+                toastMessage(getString(R.string.bt_conecting_error));
                 finish();
             }
             else
             {
-                msg("Tank připojen");
-                isBtConnected = true;
+                toastMessage(getString(R.string.bt_conecting_ok));
+                isBluetoothConnected = true;
             }
             progress.dismiss();
         }

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <Button
+        android:id="@+id/btn_right"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_below="@+id/btn_forward"
+        android:layout_toEndOf="@+id/btn_forward"
+        android:background="@drawable/btn_right" />
+
+    <Button
+        android:id="@+id/btn_forward"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/btn_forward" />
+
+    <Button
+        android:id="@+id/btn_backward"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_below="@+id/btn_right"
+        android:layout_toEndOf="@+id/btn_left"
+        android:background="@drawable/btn_backward" />
+
+    <Button
+        android:id="@+id/btn_stop"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_above="@+id/btn_backward"
+        android:layout_toEndOf="@+id/btn_left"
+        android:background="@drawable/btn_stop" />
+
+    <Button
+        android:id="@+id/btn_left"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_below="@+id/btn_forward"
+        android:layout_toStartOf="@+id/btn_forward"
+        android:background="@drawable/btn_left"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="147dp" />
+
+    <Button
+        android:id="@+id/btn_leds"
+        android:layout_width="120dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="19dp"
+        android:layout_toStartOf="@+id/btn_horn"
+        android:text="@string/btn_leds" />
+
+    <Button
+        android:id="@+id/btn_horn"
+        android:layout_width="120dip"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btn_leds"
+        android:layout_alignBottom="@+id/btn_leds"
+        android:layout_centerHorizontal="true"
+        android:text="@string/btn_horn" />
+
+    <Button
+        android:id="@+id/btn_autopilot"
+        android:layout_width="120dip"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btn_horn"
+        android:layout_alignBottom="@+id/btn_horn"
+        android:layout_toEndOf="@+id/btn_horn"
+        android:text="@string/btn_autopilot" />
+
+    <SeekBar
+        android:id="@+id/sb_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_leds"
+        android:layout_alignEnd="@+id/btn_autopilot"
+        android:layout_marginBottom="15dp"
+        android:layout_toEndOf="@+id/btn_leds" />
+
+    <TextView
+        android:id="@+id/lbl_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/btn_leds"
+        android:layout_alignTop="@+id/sb_speed"
+        android:text="@string/lbl_power"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>
+

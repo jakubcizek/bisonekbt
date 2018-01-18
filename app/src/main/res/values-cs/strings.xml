@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bišonek T18v2</string>
+    <string name="bt_connecting_msg">Připojuji se k Bišonkovi</string>
+    <string name="bt_conecting_error">Nepodařilo se připojit</string>
+    <string name="bt_com_error">Chyba komunikace</string>
+    <string name="bt_conecting_ok">Připojeno</string>
+    <string name="bt_connecting_title">Připojuji se...</string>
+    <string name="btn_horn">Klakson</string>
+    <string name="btn_leds">Světla</string>
+    <string name="btn_manual">Manuál</string>
+    <string name="btn_autopilot">Autopilot</string>
+    <string name="lbl_power">Výkon motorů</string>
+</resources>
