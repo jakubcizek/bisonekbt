@@ -26,6 +26,7 @@ public class BluetoothDevicesList extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bluetooth_devices_list);
+        getSupportActionBar().hide();
 
         devices = findViewById(R.id.listView);
 

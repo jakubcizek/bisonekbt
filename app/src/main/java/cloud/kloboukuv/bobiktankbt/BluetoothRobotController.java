@@ -48,6 +48,8 @@ public class BluetoothRobotController extends AppCompatActivity {
 
         setContentView(R.layout.bluetooth_robot_controller);
 
+        getSupportActionBar().hide();
+
         btnLeft = findViewById(R.id.btn_left);
         btnRight = findViewById(R.id.btn_right);
         btnForward = findViewById(R.id.btn_forward);
