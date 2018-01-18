@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -22,7 +21,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 
-public class TankController extends AppCompatActivity {
+public class BluetoothRobotController extends AppCompatActivity {
 
     Button btnLeft, btnRight, btnForward, btnBackward, btnStop;
     String address = null;
@@ -39,7 +38,7 @@ public class TankController extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Intent newint = getIntent();
-        address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); //receive the address of the bluetooth device
+        address = newint.getStringExtra(BluetoothDevicesList.EXTRA_ADDRESS); //receive the address of the bluetooth device
 
         //view of the ledControl
         setContentView(R.layout.activity_main2);
@@ -194,7 +193,7 @@ public class TankController extends AppCompatActivity {
         @Override
         protected void onPreExecute()
         {
-            progress = ProgressDialog.show(TankController.this, "Připojuji se k tanku", "Tož trpělivost!");  //show a progress dialog
+            progress = ProgressDialog.show(BluetoothRobotController.this, "Připojuji se k tanku", "Tož trpělivost!");  //show a progress dialog
         }
 
         @Override

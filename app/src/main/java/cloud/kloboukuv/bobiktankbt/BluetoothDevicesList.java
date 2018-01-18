@@ -4,7 +4,6 @@ package cloud.kloboukuv.bobiktankbt;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class DeviceList extends AppCompatActivity {
+public class BluetoothDevicesList extends AppCompatActivity {
 
     //widgets
     Button btnPaired;
@@ -64,7 +63,7 @@ public class DeviceList extends AppCompatActivity {
         {
             for(BluetoothDevice bt : pairedDevices)
             {
-                list.add(bt.getName() + "\n" + bt.getAddress()); //Get the device's name and the address
+                list.add(bt.getName() + "\n" + bt.getAddress());
             }
         }
 
@@ -84,7 +83,7 @@ public class DeviceList extends AppCompatActivity {
             String address = info.substring(info.length() - 17);
 
             // Make an intent to start next activity.
-            Intent i = new Intent(DeviceList.this, TankController.class);
+            Intent i = new Intent(BluetoothDevicesList.this, BluetoothRobotController.class);
 
             //Change the activity.
             i.putExtra(EXTRA_ADDRESS, address); //this will be received at ledControl (class) Activity
